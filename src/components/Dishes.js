@@ -1,5 +1,16 @@
-import React, { useState } from "react";
+import Dish from "./Dish";
 
-export default function Dishes() {
-  return <div className="dishes"></div>;
+export default function Dishes(props) {
+  function renderDishes() {
+    return props.dishes.map((dish) => (
+      <Dish key={dish.id} dish={dish} removeDish={props.removeDish} />
+    ));
+  }
+
+  return (
+    <div className="dishes">
+      <h1 className="dishes-header">Your Dishes</h1>
+      {renderDishes()}
+    </div>
+  );
 }

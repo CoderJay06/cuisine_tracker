@@ -1,5 +1,7 @@
 import React, { useState, useRef } from "react";
 import "./styles.css";
+import Dishes from "./components/Dishes";
+import nextId from "react-id-generator";
 
 /*
   show a form with an input box for dish name
@@ -14,8 +16,6 @@ export default function App() {
   const [dishData, setDishData] = useState({ name: "" });
   const [dishes, setDishes] = useState([]);
 
-  console.log(dishData);
-  console.log(dishes);
   function handleDishData(event) {
     const { name, value } = event.target;
     setDishData((prevData) => ({
@@ -26,17 +26,19 @@ export default function App() {
 
   function addDish(e) {
     e.preventDefault();
-    setDishes((prevDishes) => ({
-      ...prevDishes,
-      dishData
-    }));
+    const dishId = nextId();
+    setDishes((prevDishes) => [...prevDishes, { id: dishId, ...dishData }]);
     // clear form
     setDishData({ name: "" });
   }
 
+  function removeDish(dishId) {
+    setDishes((prevDishes) => prevDishes.filter((dish) => dish.id !== dishId));
+  }
+
   return (
     <div className="App">
-      <h1>Cruisine Tracker</h1>
+      <h1 className="main-header">Cruisine Tracker</h1>
       <form className="dish-form">
         <div className="dish-form-input">
           <label htmlFor="name">Name</label>
@@ -56,6 +58,7 @@ export default function App() {
           Add
         </button>
       </form>
+      {dishes.length > 0 && <Dishes dishes={dishes} removeDish={removeDish} />}
     </div>
   );
 }
